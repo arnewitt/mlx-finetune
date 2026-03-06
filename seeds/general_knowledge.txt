@@ -1,0 +1,23 @@
+# General knowledge seed prompts
+# One prompt per line. Blank lines and lines starting with # are ignored.
+
+What is machine learning?
+How does the internet work?
+What is the theory of relativity?
+Why is the sky blue?
+What causes seasons on Earth?
+How do stars form?
+What is DNA?
+How does a vaccine work?
+What is quantum computing?
+How does electricity work?
+What is inflation?
+How do recommendation systems work?
+What is entropy?
+Explain photosynthesis.
+How does a battery work?
+What is the speed of light?
+How do black holes form?
+What is the greenhouse effect?
+How does the human brain store memories?
+What is evolution?

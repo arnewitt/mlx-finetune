@@ -1,0 +1,52 @@
+# configs/mentor_style_nim.yaml
+# Teacher: NVIDIA NIM (cloud — integrate.api.nvidia.com)
+# Student: Qwen3.5-0.8B (default from base.yaml)
+#
+# References:
+#   Cloud API:  https://docs.nvidia.com/nim/large-language-models/latest/getting-started.html
+#   Models:     https://docs.api.nvidia.com/nim/reference/llm-apis
+#   API keys:   https://build.nvidia.com  (1 000 free credits for new users)
+#
+# Setup:
+#   export NVIDIA_API_KEY=nvapi-...
+#   uv run python generate_data.py --config configs/mentor_style_nim.yaml
+#   uv run python main.py train --config configs/mentor_style_nim.yaml
+#
+# To use a self-hosted NIM container instead, replace base_url with your
+# container's address (e.g. http://localhost:8000/v1) and set api_key to
+# "not-used".
+
+experiment_name: "customer-support-style-nim"
+
+teacher:
+  backend: "openai_api"
+  model: "moonshotai/kimi-k2.5"
+  base_url: "https://integrate.api.nvidia.com/v1"
+  # api_key omitted → reads from NVIDIA_API_KEY env var
+  max_tokens: 512
+  temperature: 1
+  extra_body:
+    chat_template_kwargs:
+      thinking: false
+  examples_file: "examples/customer_support_socialmedia.jsonl"
+  max_examples: 3
+
+seeds:
+  files:
+    - "seeds/customer_support.txt"
+  samples_per_seed: 2
+  augment: true
+
+generation:
+  output_file: "customer_support_style_nim.parquet"
+  batch_size: 1 # cloud API: sequential is safest to respect rate limits
+
+student:
+  batch_size: 1
+  num_layers: 4
+  steps_per_eval: 10
+  valid_split: 0.2
+  max_seq_length: 1024
+
+mlflow:
+  experiment: "customer-support-style-nim"

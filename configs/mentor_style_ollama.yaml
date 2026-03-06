@@ -1,0 +1,39 @@
+# configs/mentor_style_ollama.yaml
+# Teacher: local Ollama server (OpenAI-compatible endpoint)
+# Student: Qwen3.5-0.8B (default from base.yaml)
+#
+# Setup:
+#   brew install ollama && ollama pull qwen3:8b
+#   ollama serve   # runs on http://localhost:11434
+#   uv run python generate_data.py --config configs/mentor_style_ollama.yaml
+#   uv run python main.py train --config configs/mentor_style_ollama.yaml
+
+experiment_name: "mentor-style-ollama-qwen7b"
+
+teacher:
+  backend: "openai_api"
+  model: "qwen3:8b"
+  base_url: "http://localhost:11434/v1"
+  api_key: "ollama"             # Ollama requires a non-empty string
+  max_tokens: 600
+  temperature: 0.85
+  examples_file: "examples/warm_mentor.jsonl"
+  max_examples: 5
+
+seeds:
+  files:
+    - "seeds/general_knowledge.txt"
+    - "seeds/style_transfer.txt"
+  samples_per_seed: 5
+  augment: true
+
+generation:
+  output_file: "mentor_ollama.parquet"
+  batch_size: 1
+
+student:
+  batch_size: 1
+  num_layers: 8
+
+mlflow:
+  experiment: "mentor-style-ollama"

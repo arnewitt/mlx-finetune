@@ -1,0 +1,40 @@
+# configs/style_transfer_small.yaml
+# Teacher: OpenAI API (gpt-5-mini)
+# Student: Qwen3.5-0.8B (default from base.yaml)
+#
+# Setup:
+#   export OPENAI_API_KEY=sk-...
+#   uv run python generate_data.py --config configs/style_transfer_small.yaml
+#   uv run python main.py train --config configs/style_transfer_small.yaml
+
+experiment_name: "custom"
+
+teacher:
+  backend: "openai_api"
+  model: "gpt-5-mini"
+  max_tokens: 600
+  temperature: 1
+  examples_file: "examples/warm_mentor.jsonl"
+  max_examples: 5
+  # base_url omitted → uses OpenAI's default endpoint
+  # api_key omitted → reads from OPENAI_API_KEY env var
+
+seeds:
+  files:
+    # - "seeds/general_knowledge.txt"
+    - "seeds/style_transfer_small.txt"
+  samples_per_seed: 1
+  augment: true
+
+generation:
+  output_file: "style_transfer_small.parquet"
+  batch_size: 1
+
+student:
+  batch_size: 1
+  num_layers: 8
+  grad_checkpoint: true
+  max_seq_length: 512
+
+mlflow:
+  experiment: "style_transfer_small"

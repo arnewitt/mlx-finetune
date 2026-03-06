@@ -1,0 +1,52 @@
+# configs/base.yaml — shared defaults for all experiments
+# Experiment-specific configs override only the keys they need.
+
+experiment_name: "unnamed"
+
+teacher:
+  backend: "local_mlx"          # "local_mlx" | "openai_api"
+  model: "mlx-community/Qwen2.5-7B-Instruct-4bit"
+  max_tokens: 512               # 512 covers most explanations without runaway generation
+  temperature: 1              # slight randomness encourages output variety across seeds
+  system_prompt: |
+    You are a warm, knowledgeable mentor. Explain concepts using vivid analogies
+    and concrete everyday examples. Keep responses focused and clear.
+    End with a single sentence of genuine encouragement.
+  # Optional: path to JSONL file with {"instruction": ..., "output": ...} few-shot examples.
+  # Examples are injected as user/assistant turns before each new instruction,
+  # teaching the model the exact style, tone, and length you want.
+  examples_file: null
+  max_examples: 5               # 5 examples keeps context short; increase for longer context windows
+
+seeds:
+  files:
+    - "seeds/general_knowledge.txt"
+  samples_per_seed: 3           # 3 gives diversity without inflating the dataset per seed
+  augment: true                 # paraphrase seeds via templates to add surface-level variety
+
+generation:
+  output_dir: "data"
+  output_file: "generated.parquet"
+  batch_size: 8                 # 8 prompts per batch balances throughput and memory on Apple Silicon
+  resume: true                  # skip seeds already in the parquet (makes runs idempotent)
+
+quality:
+  min_output_tokens: 40         # filters one-liners that lack the mentor's explanatory depth
+  max_output_tokens: 600        # avoids excessively long outputs that slow training
+  min_instruction_tokens: 2     # permits very short questions ("What is X?")
+  max_instruction_tokens: 200   # discards overly complex compound instructions
+  dedup_strategy: "exact"       # "none" | "exact" | "semantic" — exact is fast and zero-dependency
+  semantic_threshold: 0.92      # cosine similarity cutoff; 0.92 removes near-duplicates while keeping variation
+  filter_refusals: true         # drop outputs matching refusal patterns (e.g. "I'm sorry, I can't…")
+
+student:
+  model: "mlx-community/Qwen3.5-0.8B-OptiQ-4bit"
+  iters: 200                    # 200 iterations is a reasonable default for small datasets
+  batch_size: 4                 # auto-reduced if dataset is smaller than this
+  num_layers: 16                # fine-tuning only the top 16 layers balances speed and quality
+  learning_rate: 1.0e-5         # conservative LR avoids catastrophic forgetting of base knowledge
+  valid_split: 0.1              # 10 % held out for validation loss monitoring
+
+mlflow:
+  tracking_uri: "http://localhost:5002"   # default port set in start_mlflow.sh
+  experiment: "teacher-student"

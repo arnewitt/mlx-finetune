@@ -1,0 +1,38 @@
+# configs/mentor_style_openai.yaml
+# Teacher: OpenAI API (gpt-5-mini)
+# Student: Qwen3.5-0.8B (default from base.yaml)
+#
+# Setup:
+#   export OPENAI_API_KEY=sk-...
+#   uv run python generate_data.py --config configs/mentor_style_openai.yaml
+#   uv run python main.py train --config configs/mentor_style_openai.yaml
+
+experiment_name: "mentor-style-openai-gpt4o"
+
+teacher:
+  backend: "openai_api"
+  model: "gpt-5-mini"
+  max_tokens: 600
+  temperature: 0.8
+  examples_file: "examples/warm_mentor.jsonl"
+  max_examples: 1
+  # base_url omitted → uses OpenAI's default endpoint
+  # api_key omitted → reads from OPENAI_API_KEY env var
+
+seeds:
+  files:
+    # - "seeds/general_knowledge.txt"
+    - "seeds/style_transfer.txt"
+  samples_per_seed: 3
+  augment: true
+
+generation:
+  output_file: "mentor_openai.parquet"
+  batch_size: 1
+
+student:
+  batch_size: 1
+  num_layers: 8
+
+mlflow:
+  experiment: "mentor-style-openai"

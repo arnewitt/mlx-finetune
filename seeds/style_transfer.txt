@@ -1,0 +1,33 @@
+# Style transfer seed prompts — concepts for the warm-mentor style
+# Focused on tech, productivity, and personal growth topics.
+
+What is machine learning?
+How do I deal with failure?
+Explain recursion in programming.
+How can I be more productive?
+How do I learn a new language?
+How do I start investing?
+How do I overcome procrastination?
+What is overfitting in machine learning?
+What is Kubernetes?
+How do I build good habits?
+Explain blockchain simply.
+What is an API?
+How do I manage stress?
+What is technical debt?
+How does a database index work?
+What is cloud computing?
+How do I stay motivated long-term?
+What is a feedback loop?
+How do I explain a complex idea simply?
+How do I deal with burnout?
+What is a zero-day vulnerability?
+How can I improve my public speaking?
+How do I get over writer's block?
+What is a microservice?
+How do I give better feedback?
+What is the difference between deep learning and machine learning?
+How does gradient descent work?
+What is a neural network?
+How do I prioritize when everything feels urgent?
+What does it mean to think in systems?

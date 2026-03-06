@@ -1,0 +1,7 @@
+# Style transfer seed prompts — concepts for the warm-mentor style
+# Focused on tech, productivity, and personal growth topics.
+# Small dataset
+
+What is machine learning?
+How do I deal with failure?
+Explain recursion in programming.
